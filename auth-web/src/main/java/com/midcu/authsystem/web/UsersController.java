@@ -2,6 +2,7 @@ package com.midcu.authsystem.web;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.midcu.authsystem.web.qo.UserQuery;
 import com.midcu.authsystem.web.rp.BaseResponse;
@@ -61,7 +62,7 @@ public class UsersController {
 
 		List<MenuVo> menus = menusServiceImpl.findMenuByUserId(userVo.getId(), MenuVo.class);
 
-		List<String> permissions = permissionServiceImpl.findPermissionByUserId(userVo.getId(), PermissionVo.class).stream().map(p -> p.name).toList();
+		List<String> permissions = permissionServiceImpl.findPermissionByUserId(userVo.getId(), PermissionVo.class).stream().map(p -> p.name).collect(Collectors.toList());
 
 		return new ResponseEntity<>(new InfoVo(menus, userVo, permissions), HttpStatus.OK);
 	}

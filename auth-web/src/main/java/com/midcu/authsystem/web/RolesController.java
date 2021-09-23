@@ -1,6 +1,7 @@
 package com.midcu.authsystem.web;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.midcu.authsystem.web.qo.RoleQuery;
 import com.midcu.authsystem.web.rp.BaseResponse;
@@ -82,7 +83,7 @@ public class RolesController {
 	@PreAuthorize("hasAuthority('roles:menus')")
 	public ResponseEntity<Object> roleId(@PathVariable("roleId") Long roleId) {
 
-		return new ResponseEntity<>(new ListResponse<Long>(rolesServiceImpl.findMenuVoByRoleId(roleId, MenuLiteVo.class).stream().map(p -> p.id).toList()), HttpStatus.OK);
+		return new ResponseEntity<>(new ListResponse<Long>(rolesServiceImpl.findMenuVoByRoleId(roleId, MenuLiteVo.class).stream().map(p -> p.id).collect(Collectors.toList())), HttpStatus.OK);
 	}
 
 	@Operation(
@@ -106,7 +107,7 @@ public class RolesController {
 	@PreAuthorize("hasAuthority('roles:permissions')")
 	public ResponseEntity<Object> permission(@PathVariable("roleId") Long roleId) {
 
-		return new ResponseEntity<>(new ListResponse<Long>(permissionServiceImpl.findPermissionByRoleId(roleId, PermissionLiteVo.class).stream().map(p -> p.id).toList()), HttpStatus.OK);
+		return new ResponseEntity<>(new ListResponse<Long>(permissionServiceImpl.findPermissionByRoleId(roleId, PermissionLiteVo.class).stream().map(p -> p.id).collect(Collectors.toList())), HttpStatus.OK);
 	}
 
 	@Operation(
