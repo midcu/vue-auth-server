@@ -45,6 +45,12 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     public Date createTime;
 
+    /**
+     * 0：已禁用
+     * 1：正常访问
+     * 2：正在注册中
+     * 3：账号异常
+     */
     @Column(nullable = false)
     public Integer state;
 }

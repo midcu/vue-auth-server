@@ -8,7 +8,6 @@ import com.midcu.authsystem.dto.UserDto;
 import com.midcu.authsystem.service.PermissionService;
 import com.midcu.authsystem.service.UsersService;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -45,7 +44,7 @@ public class JwtTokenProvider {
 
         UserDetailsImpl userDetails = null;
 
-        if (!StringUtils.isEmpty(authToken)) {
+        if (authToken != null) {
             try {
 
                 Jws<Claims> parsedToken = Jwts.parserBuilder().setSigningKey(SecurityConstants.JWT_SECRET).build().parseClaimsJws(authToken);
