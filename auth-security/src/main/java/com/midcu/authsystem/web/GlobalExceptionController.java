@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.midcu.authsystem.exception.ResponseException;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -19,18 +20,30 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class GlobalExceptionController {
 
+    @Value("spring.profiles.active:prod") String profilesActive;
+
     @ExceptionHandler(Throwable.class)
     public ResponseEntity<ResponseException> handleException(Throwable e){
 
-        log.error("发生未知错误：", e);
+        if (profilesActive.equals("dev") || profilesActive.equals("test")) {
+            log.error("请求发生错误：", e);
+            return new ResponseEntity<ResponseException>(new ResponseException(e.getMessage()), HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<ResponseException>(new ResponseException("请求发生错误！"), HttpStatus.BAD_REQUEST);
+        }
 
-        return new ResponseEntity<ResponseException>(new ResponseException(e.getMessage()), HttpStatus.BAD_REQUEST);
+
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ResponseException> handleException(HttpRequestMethodNotSupportedException e){
 
-        return new ResponseEntity<ResponseException>(new ResponseException(e.getMessage()), HttpStatus.BAD_REQUEST);
+        if (profilesActive.equals("dev") || profilesActive.equals("test")) {
+            return new ResponseEntity<ResponseException>(new ResponseException(e.getMessage()), HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<ResponseException>(new ResponseException("请求发生错误！"), HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     @ExceptionHandler(BindException.class)

@@ -124,14 +124,4 @@ public class UsersServiceImpl extends BaseServiceImpl<User> implements UsersServ
         return usersRepository.findById(id, tClass);
     }
 
-    // public static void main(String[] args) {
-    //     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
-    //     String a = encoder.encode("123");
-
-    //     System.out.println(a);
-
-    // }
-
-    
 }

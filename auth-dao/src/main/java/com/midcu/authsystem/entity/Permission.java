@@ -38,6 +38,7 @@ public class Permission {
     @Temporal(TemporalType.TIMESTAMP)
     public Date createTime;
 
+    @Column(nullable = false)
     public Long pid;
 
     public Integer state;

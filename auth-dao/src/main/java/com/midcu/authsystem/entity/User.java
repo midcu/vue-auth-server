@@ -45,5 +45,6 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     public Date createTime;
 
+    @Column(nullable = false)
     public Integer state;
 }
