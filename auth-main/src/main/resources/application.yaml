@@ -36,3 +36,5 @@ midcu:
         security:
             # 登录、注销、注册、swagger相关页面接口
             permitUrl: /login,/logout,/signup,/swagger-ui/**,/v3/api-docs/** # 默认值 Null 无免认证路径
+            tokenHeader: Authorization
+            expirationTime: 86400000 # 1 day
