@@ -53,10 +53,13 @@ public class JwtTokenProvider {
 
                 UserDto userDto = usersServiceImpl.findUserByUsername(username, UserDto.class);
 
+                if (userDto.getState() != 1) {
+                    return null;
+                }
+
                 userDetails = new UserDetailsImpl();
 
                 userDetails.setId(userDto.getId());
-                userDetails.setPassword(userDto.getPassword());
                 userDetails.setUsername(userDto.getUsername());
                 userDetails.setStatus(userDto.getState());
 

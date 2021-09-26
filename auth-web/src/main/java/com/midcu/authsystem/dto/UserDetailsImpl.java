@@ -3,7 +3,6 @@ package com.midcu.authsystem.dto;
 import java.util.Collection;
 import java.util.List;
 
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.Setter;
@@ -19,7 +18,7 @@ public class UserDetailsImpl implements UserDetails{
     private Integer status;
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public Collection<PermissionDto> getAuthorities() {
         return this.permissions;
     }
     

@@ -1,7 +1,17 @@
 package com.midcu.authsystem.impl;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Selection;
+import javax.persistence.criteria.Subquery;
 
 import com.midcu.authsystem.dao.PermissionRepository;
 import com.midcu.authsystem.dao.RolePermissionRepository;
@@ -9,12 +19,17 @@ import com.midcu.authsystem.dao.UserRoleRepository;
 import com.midcu.authsystem.entity.Permission;
 import com.midcu.authsystem.entity.RolePermission;
 import com.midcu.authsystem.entity.UserRole;
+import com.midcu.authsystem.exception.SysException;
 import com.midcu.authsystem.service.PermissionService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class PermissionServiceImpl extends BaseServiceImpl<Permission> implements PermissionService {
 
     @Autowired
@@ -29,39 +44,83 @@ public class PermissionServiceImpl extends BaseServiceImpl<Permission> implement
     @Override
     public <T> List<T> findPermissionByRoleId(Long roleId, Class<T> tClass) {
 
-        List<RolePermission> rolePermissions = rolePermissionRepository.findAllByRoleId(roleId);
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
-        List<Long> permissionIds = new ArrayList<Long>();
+        CriteriaQuery<T> cq = builder.createQuery(tClass);
 
-        for(RolePermission rp : rolePermissions) {
-            permissionIds.add(rp.getPermissionId());
+        Root<Permission> root = cq.from(Permission.class);
+
+        Field[] roFields = tClass.getDeclaredFields();
+
+        // permission id查询  查询表 role_permission
+
+        Subquery<Long> cqRolePermission = cq.subquery(Long.class);
+        Root<RolePermission> rootRolePermission = cqRolePermission.from(RolePermission.class);
+
+        cqRolePermission.select(rootRolePermission.get("permissionId")).where(builder.equal(rootRolePermission.get("roleId"), roleId));
+
+        try {
+            // 请求体设置为需要查询的字段  字段为public类型的参数
+            List<Selection<?>> selections = new ArrayList<Selection<?>>();
+            for(Field f: roFields) {
+                f.setAccessible(true);
+                selections.add(root.get(f.getName()));
+            }
+            cq.multiselect(selections);
+
+        } catch (Exception e) {
+            log.error("查询参数问题", e);
+            throw new SysException("查询失败！");
         }
 
-        return permissionRepository.findByIdIn(permissionIds, tClass);
+        cq.where(builder.in(root.get("id")).value(cqRolePermission));
+
+        return entityManager.createQuery(cq).getResultList();
 
     }
 
     @Override
     public <T> List<T> findPermissionByUserId(Long userId, Class<T> tClass) {
 
-        List<UserRole> userRoles = userRoleRepository.findByUserId(userId);
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
-        List<Long> roleIds = new ArrayList<Long>();
+        CriteriaQuery<T> cq = builder.createQuery(tClass);
 
+        Root<Permission> root = cq.from(Permission.class);
 
-        for(UserRole ur : userRoles) {
-            roleIds.add(ur.getRoleId());
+        Field[] roFields = tClass.getDeclaredFields();
+
+        // permission id查询  查询表 role_permission
+
+        Subquery<Long> cqRolePermission = cq.subquery(Long.class);
+        Root<RolePermission> rootRolePermission = cqRolePermission.from(RolePermission.class);
+
+        // role id 查询 查询表 user_role
+
+        Subquery<Long> cqUserRole = cqRolePermission.subquery(Long.class);
+        Root<UserRole> rootUserRole = cqUserRole.from(UserRole.class);
+
+        cqUserRole.select(rootUserRole.get("roleId")).where(builder.equal(rootUserRole.get("userId"), userId));
+
+        cqRolePermission.select(rootRolePermission.get("permissionId")).where(builder.in(rootRolePermission.get("roleId")).value(cqUserRole));
+
+        try {
+            // 请求体设置为需要查询的字段  字段为public类型的参数
+            List<Selection<?>> selections = new ArrayList<Selection<?>>();
+            for(Field f: roFields) {
+                f.setAccessible(true);
+                selections.add(root.get(f.getName()));
+            }
+            cq.multiselect(selections);
+
+        } catch (Exception e) {
+            log.error("查询参数问题", e);
+            throw new SysException("查询失败！");
         }
 
-        List<RolePermission> rolePermissions = rolePermissionRepository.findByRoleIdIn(roleIds);
+        cq.where(builder.in(root.get("id")).value(cqRolePermission));
 
-        List<Long> permissionIds = new ArrayList<Long>();
-
-        for(RolePermission rp : rolePermissions) {
-            permissionIds.add(rp.getPermissionId());
-        }
-
-        return permissionRepository.findByIdIn(permissionIds, tClass);
+        return entityManager.createQuery(cq).getResultList();
     }
     
 }

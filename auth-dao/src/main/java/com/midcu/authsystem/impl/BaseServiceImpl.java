@@ -33,7 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 public abstract class BaseServiceImpl<T> implements BaseService {
 
     @PersistenceContext
-    private EntityManager entityManager;
+    public EntityManager entityManager;
 
     /**
      * 根据泛型获取class 根据class获取实例

@@ -1,19 +1,12 @@
 package com.midcu.authsystem.web;
 
-import java.security.Principal;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.midcu.authsystem.web.qo.UserQuery;
 import com.midcu.authsystem.web.rp.BaseResponse;
 import com.midcu.authsystem.web.ro.UserRo;
 import com.midcu.authsystem.web.vo.BaseVo;
-import com.midcu.authsystem.web.vo.InfoVo;
-import com.midcu.authsystem.web.vo.MenuVo;
-import com.midcu.authsystem.web.vo.PermissionVo;
 import com.midcu.authsystem.web.vo.UserVo;
-import com.midcu.authsystem.service.MenusService;
-import com.midcu.authsystem.service.PermissionService;
 import com.midcu.authsystem.service.RolesService;
 import com.midcu.authsystem.service.UsersService;
 
@@ -44,28 +37,6 @@ public class UsersController {
 
 	@Autowired
 	private RolesService rolesServiceImpl;
-
-	@Autowired
-	private MenusService menusServiceImpl;
-
-	@Autowired
-	private PermissionService permissionServiceImpl;
-
-	@Operation(
-		summary = "用户数据初始化",
-    	description = "返回用户的角色，权限，菜单等内容，用于构建前端页面。"
-	)
-	@GetMapping("/init")
-	public ResponseEntity<Object> init(Principal principal) {
-
-		UserVo userVo = usersServiceImpl.findUserByUsername(principal.getName(), UserVo.class);
-
-		List<MenuVo> menus = menusServiceImpl.findMenuByUserId(userVo.getId(), MenuVo.class);
-
-		List<String> permissions = permissionServiceImpl.findPermissionByUserId(userVo.getId(), PermissionVo.class).stream().map(p -> p.name).collect(Collectors.toList());
-
-		return new ResponseEntity<>(new InfoVo(menus, userVo, permissions), HttpStatus.OK);
-	}
 
 	@Operation(
 		summary = "用户列表获取",
