@@ -7,7 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.midcu.authsystem.web.vo.ResponseVo;
+import com.midcu.authsystem.web.rp.ExceptionResponse;
 import com.wf.captcha.utils.CaptchaUtil;
 
 import org.apache.commons.lang3.StringUtils;
@@ -34,7 +34,7 @@ public class CaptchaFilter extends OncePerRequestFilter{
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 response.setContentType("application/json; charset=UTF-8");
     
-                response.getWriter().print(new ResponseVo("未填写验证码！").toString());
+                response.getWriter().print(new ExceptionResponse("未填写验证码！").toString());
                 
             } else if (!CaptchaUtil.ver(codeName, request)) {
                 CaptchaUtil.clear(request);
@@ -42,7 +42,7 @@ public class CaptchaFilter extends OncePerRequestFilter{
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 response.setContentType("application/json; charset=UTF-8");
     
-                response.getWriter().print(new ResponseVo("验证码错误！").toString());
+                response.getWriter().print(new ExceptionResponse("验证码错误！").toString());
             } else {
                 CaptchaUtil.clear(request);
                 filterChain.doFilter(request, response);

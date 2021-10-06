@@ -2,7 +2,7 @@ package com.midcu.authsystem.web;
 
 import java.util.List;
 
-import com.midcu.authsystem.web.vo.ResponseVo;
+import com.midcu.authsystem.web.rp.BaseResponse;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -23,27 +23,27 @@ public class GlobalExceptionController {
     @Value("${spring.profiles.active:prod}") String profilesActive;
 
     @ExceptionHandler(Throwable.class)
-    public ResponseEntity<ResponseVo> handleException(Throwable e){
+    public ResponseEntity<BaseResponse> handleException(Throwable e){
 
         if (profilesActive.equals("dev") || profilesActive.equals("test")) {
             log.error("请求发生错误：", e);
-            return new ResponseEntity<ResponseVo>(new ResponseVo(e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<BaseResponse>(new BaseResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
         } else {
-            return new ResponseEntity<ResponseVo>(new ResponseVo("请求发生错误！"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<BaseResponse>(new BaseResponse("请求发生错误！"), HttpStatus.BAD_REQUEST);
         }
 
 
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<ResponseVo> handleException(HttpRequestMethodNotSupportedException e){
+    public ResponseEntity<BaseResponse> handleException(HttpRequestMethodNotSupportedException e){
 
-        return new ResponseEntity<ResponseVo>(new ResponseVo("请求方法不支持！"), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<BaseResponse>(new BaseResponse("请求方法不支持！"), HttpStatus.BAD_REQUEST);
 
     }
 
     @ExceptionHandler(BindException.class)
-    public ResponseEntity<ResponseVo> handleException(BindException e){
+    public ResponseEntity<BaseResponse> handleException(BindException e){
 
         List<ObjectError> errorList = e.getBindingResult().getAllErrors();
         StringBuilder msg = new StringBuilder();
@@ -54,13 +54,13 @@ public class GlobalExceptionController {
             }
         }
 
-        return new ResponseEntity<ResponseVo>(new ResponseVo(msg.toString()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<BaseResponse>(new BaseResponse(msg.toString()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ResponseVo> handleAccessDeniedException(AccessDeniedException e){
+    public ResponseEntity<BaseResponse> handleAccessDeniedException(AccessDeniedException e){
 
-        return new ResponseEntity<ResponseVo>(new ResponseVo("没有访问权限！"), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<BaseResponse>(new BaseResponse("没有访问权限！"), HttpStatus.UNAUTHORIZED);
     }
 
 }

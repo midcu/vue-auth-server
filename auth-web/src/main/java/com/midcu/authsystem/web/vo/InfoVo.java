@@ -2,8 +2,6 @@ package com.midcu.authsystem.web.vo;
 
 import java.util.List;
 
-// import com.midcu.authsystem.entity.Menu;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

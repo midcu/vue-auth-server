@@ -7,18 +7,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.midcu.authsystem.filter.CaptchaFilter;
-import com.midcu.authsystem.handler.AuAccessDeniedHandler;
-import com.midcu.authsystem.handler.AuAuthEntryPoint;
 import com.midcu.authsystem.web.rp.JsonResponse;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -32,15 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Value("${midcu.authsystem.security.permitUrl:Null}") private String permitUrls;
 
-	@Bean
-	public AuAccessDeniedHandler auAccessDeniedHandler() {
-		return new AuAccessDeniedHandler();
-	}
-
-	@Bean
-	public AuAuthEntryPoint auAuthEntryPoint() {
-		return new AuAuthEntryPoint();
-	}
+	@Value("${midcu.authsystem.security.captcha:true}") private Boolean captcha;
 
 	@Bean
 	public CaptchaFilter captchaFilter() {
@@ -52,7 +45,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.httpBasic().disable().csrf().disable();
 
-		http.addFilterBefore(captchaFilter(), UsernamePasswordAuthenticationFilter.class);
+		if (captcha) {
+			// 是否开启验证码拦截
+			http.addFilterBefore(captchaFilter(), UsernamePasswordAuthenticationFilter.class);
+		}
 
 		http.formLogin().successHandler(new AuthenticationSuccessHandler() {
 
@@ -89,8 +85,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		}
 
 		http.authorizeRequests().anyRequest().authenticated();
-		http.exceptionHandling().accessDeniedHandler(auAccessDeniedHandler())
-		.authenticationEntryPoint(auAuthEntryPoint());
+
+		http.exceptionHandling().accessDeniedHandler(new AccessDeniedHandler() {
+
+			@Override
+			public void handle(HttpServletRequest request, HttpServletResponse response,
+					AccessDeniedException accessDeniedException) throws IOException, ServletException {
+				// 访问未授权资源时，返回401
+				response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "没有访问权限！");
+			}
+			
+		})
+		.authenticationEntryPoint(new AuthenticationEntryPoint() {
+
+			@Override
+			public void commence(HttpServletRequest request, HttpServletResponse response,
+					AuthenticationException authException) throws IOException, ServletException {
+				// 未登录或者登录超时，返回403
+				response.sendError(HttpServletResponse.SC_FORBIDDEN, "禁止访问！");
+			}
+			
+		});
 		
 	}
 
