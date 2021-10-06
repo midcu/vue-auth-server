@@ -17,8 +17,6 @@
 	<modules>
 		<module>auth-web</module>
 		<module>auth-dao</module>
-		<!-- <module>auth-security</module> -->
-		<!-- <module>auth-security-login</module> -->
 		<module>auth-security-session</module>
 		<module>auth-main</module>
 	</modules>
@@ -46,21 +44,5 @@
 			<artifactId>lombok</artifactId>
 		</dependency>
 	</dependencies>
-	<!-- <build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build> -->
 
 </project>
