@@ -17,8 +17,9 @@
 	<modules>
 		<module>auth-web</module>
 		<module>auth-dao</module>
-		<module>auth-security</module>
-		<module>auth-security-login</module>
+		<!-- <module>auth-security</module> -->
+		<!-- <module>auth-security-login</module> -->
+		<module>auth-security-session</module>
 		<module>auth-main</module>
 	</modules>
 	<properties>

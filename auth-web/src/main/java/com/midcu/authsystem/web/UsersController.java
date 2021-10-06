@@ -75,7 +75,7 @@ public class UsersController {
 
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-            userRo.setPassword(encoder.encode(userRo.getPassword()));
+            userRo.setPassword("{bcrypt}".concat(encoder.encode(userRo.getPassword())));
         }
 
 		usersServiceImpl.update(userRo, id);
@@ -115,5 +115,15 @@ public class UsersController {
 
 		usersServiceImpl.setUserRoles(id, roleIds);
 		return new ResponseEntity<>(new BaseResponse("角色设置成功！"), HttpStatus.OK);
+	}
+
+	public static void main(String[] args) {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+		String pwd = "{bcrypt}";
+
+		pwd = "{bcrypt}".concat(encoder.encode("cdef3cb7e063a2989304c7862c7f5c82"));
+
+		System.out.println(pwd);
 	}
 }

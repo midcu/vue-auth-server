@@ -16,7 +16,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.midcu</groupId>
-			<artifactId>auth-security-login</artifactId>
+			<artifactId>auth-security-session</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>

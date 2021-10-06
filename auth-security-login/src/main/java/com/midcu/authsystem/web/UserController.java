@@ -1,5 +1,6 @@
 package com.midcu.authsystem.web;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -96,4 +97,18 @@ public class UserController {
         return new ResponseEntity<>(new BaseResponse("退出登录！"), HttpStatus.OK);
 	}
     
+    @Operation( summary = "token刷新")
+	@GetMapping("/refreshtoken")
+	public ResponseEntity<Object> refresh(Principal principal) {
+
+        UserDto userDto = new UserDto(null, principal.getName(), null, null);
+
+        String token = jwtTokenProvider.generateJwtToken(userDto);
+
+        Map<String, Object> authInfo = new HashMap<String, Object>();
+        
+        authInfo.put("token", token);
+
+        return new ResponseEntity<>(authInfo, HttpStatus.OK);
+	}
 }
