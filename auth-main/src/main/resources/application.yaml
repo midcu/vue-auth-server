@@ -38,3 +38,7 @@ midcu:
             permitUrl: /login,/logout,/signup,/swagger-ui/**,/v3/api-docs/**,/captcha # 默认值 Null 无免认证路径
             tokenHeader: Authorization
             expirationTime: 86400000 # 1 day
+            admin: false # 是否开启管理员账号
+            user: ## 管理员账号
+                username: admin
+                password: '{bcrypt}$2a$10$JnpZPl3538rLRtfqR3xZzeXRkK9VQtm2TbizEhGhR6iqSK5ofFAiu' #vue-auth123456 的 bcrypt加密 且加上{bcrypt}前缀

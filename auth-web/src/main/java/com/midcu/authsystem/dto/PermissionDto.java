@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class PermissionDto implements GrantedAuthority{
 
-    private String name;
+    public String name;
 
     @Override
     public String getAuthority() {

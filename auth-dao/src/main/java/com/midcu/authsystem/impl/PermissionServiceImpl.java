@@ -114,7 +114,7 @@ public class PermissionServiceImpl extends BaseServiceImpl<Permission> implement
             throw new SysException("查询失败！");
         }
 
-        cq.where(builder.in(root.get("id")).value(cqRolePermission));
+        cq.where(builder.in(root.get("id")).value(cqRolePermission)).where(builder.equal(root.get("state"), 1));
 
         return entityManager.createQuery(cq).getResultList();
     }
