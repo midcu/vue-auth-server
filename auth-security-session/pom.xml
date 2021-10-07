@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.midcu</groupId>
 	<artifactId>auth-security-session</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2</version>
 	<name>auth-security-session</name>
 	<description>Authsecurity project for Spring Boot</description>
 	<!-- 属性设置 -->
@@ -64,32 +64,13 @@
 		<dependency>
 			<groupId>com.midcu</groupId>
 			<artifactId>auth-dao</artifactId>
-			<version>0.0.1</version>
+			<version>0.0.2</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
-		</dependency>
-
-		<!-- JWT Token -->
-		<dependency>
-			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt-api</artifactId>
-			<version>0.11.2</version>
-		</dependency>
-		<dependency>
-			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt-impl</artifactId>
-			<version>0.11.2</version>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt-jackson</artifactId>
-			<version>0.11.2</version>
-			<scope>runtime</scope>
 		</dependency>
 
 		<!-- Java图形验证码 -->

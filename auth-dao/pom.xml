@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.midcu</groupId>
 	<artifactId>auth-dao</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2</version>
 	<name>auth-dao</name>
 	<description>Authdao project for Spring Boot</description>
 	<!-- 属性设置 -->
@@ -73,7 +73,7 @@
 		<dependency>
 			<groupId>com.midcu</groupId>
 			<artifactId>auth-web</artifactId>
-			<version>0.0.1</version>
+			<version>0.0.2</version>
 		</dependency>
 	</dependencies>
 
