@@ -40,6 +40,6 @@ public class MenuRo implements BaseRo{
     private String iframeSrc;
 
     @NotNull(message = "请设置状态！")
-    private Integer state = 0;
+    private Integer state;
 
 }

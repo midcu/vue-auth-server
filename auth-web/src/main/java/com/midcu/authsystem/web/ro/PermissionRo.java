@@ -18,6 +18,7 @@ public class PermissionRo implements BaseRo {
 
     @NotNull(message = "请填写父ID！")
     private Long pid;
-
-    private Integer state = 0;
+    
+    @NotNull(message = "请设置状态！")
+    private Integer state;
 }

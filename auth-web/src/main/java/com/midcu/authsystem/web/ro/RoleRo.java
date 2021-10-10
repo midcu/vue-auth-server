@@ -1,6 +1,7 @@
 package com.midcu.authsystem.web.ro;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 
@@ -11,6 +12,7 @@ public class RoleRo implements BaseRo{
 
     private String description;
 
-    private Integer state = 0;
+    @NotNull(message = "请设置状态！")
+    private Integer state;
     
 }

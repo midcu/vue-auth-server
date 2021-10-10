@@ -60,7 +60,7 @@ public class GlobalExceptionController {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<BaseResponse> handleAccessDeniedException(AccessDeniedException e){
 
-        return new ResponseEntity<BaseResponse>(new BaseResponse("没有访问权限！"), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<BaseResponse>(new BaseResponse("没有操作权限！"), HttpStatus.UNAUTHORIZED);
     }
 
 }

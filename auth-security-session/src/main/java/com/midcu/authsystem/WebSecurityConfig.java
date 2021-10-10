@@ -92,7 +92,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			public void handle(HttpServletRequest request, HttpServletResponse response,
 					AccessDeniedException accessDeniedException) throws IOException, ServletException {
 				// 访问未授权资源时，返回401
-				response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "没有访问权限！");
+				response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "没有操作权限！");
 			}
 			
 		})

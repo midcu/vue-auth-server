@@ -99,7 +99,7 @@ public class MenusServiceImpl extends BaseServiceImpl<Menu> implements MenusServ
             throw new SysException("查询失败！");
         }
 
-        cq.where(builder.in(root.get("id")).value(cqRoleMenu)).orderBy(builder.asc(root.get("sort"))).where(builder.equal(root.get("state"), 1));
+        cq.where(builder.in(root.get("id")).value(cqRoleMenu), builder.equal(root.get("state"), 1)).orderBy(builder.asc(root.get("sort")));
 
         return entityManager.createQuery(cq).getResultList();
     }
