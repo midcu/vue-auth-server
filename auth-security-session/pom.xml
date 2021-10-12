@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.midcu</groupId>
 	<artifactId>auth-security-session</artifactId>
-	<version>0.0.2</version>
+	<version>0.0.3</version>
 	<name>auth-security-session</name>
 	<description>Authsecurity project for Spring Boot</description>
 	<!-- 属性设置 -->
